@@ -10,7 +10,18 @@ const isDev = !isProd;
 const filename = ext => isDev ? `bundle.${ext}` : `bundle.hash.${ext}`
 
 const jsLoaders = () => {
-  const loaders = []
+  const loaders = [
+    {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env']
+        }
+    }
+  ]
+  if(isDev){
+    loaders.push('eslint-loader')
+  }
+  return loaders
 }
 
 
@@ -77,12 +88,7 @@ module.exports = {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
                 use: jsLoaders(),
-                use: {
-                  loader: 'babel-loader',
-                  options: {
-                    presets: ['@babel/preset-env']
-                  }
-                }
+                
               }
           ],
     }
