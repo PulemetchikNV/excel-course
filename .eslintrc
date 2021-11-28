@@ -11,5 +11,5 @@
         "coma-dangle": "off",
         "require-jsdoc" : "off"
     },
-    "extends": "google",
+    "extends": "google"
 }
