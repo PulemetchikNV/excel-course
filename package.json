@@ -1,0 +1,16 @@
+{
+  "name": "excel-course",
+  "version": "1.0.0",
+  "description": "Pure JavaScript Excel application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "js",
+    "javascript",
+    "excel"
+  ],
+  "author": "Pulemet4ikNV",
+  "license": "ISC"
+}
