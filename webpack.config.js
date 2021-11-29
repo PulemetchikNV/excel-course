@@ -12,15 +12,17 @@ const filename = ext => isDev ? `bundle.${ext}` : `bundle.hash.${ext}`
 const jsLoaders = () => {
   const loaders = [
     {
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env']
-        }
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env']
+      }
     }
   ]
-  if(isDev){
+
+  if (isDev) {
     loaders.push('eslint-loader')
   }
+
   return loaders
 }
 
@@ -44,7 +46,7 @@ module.exports = {
     devtool : isDev ? 'source-map' : false,
     devServer: {
         port: 3000,
-        hot: isDev
+        // hot: isDev
     },
     plugins:[
         new CleanWebpackPlugin(),
@@ -76,8 +78,7 @@ module.exports = {
                 {
                   loader: MiniCssExtractPlugin.loader,
                   options: {
-                    hmr: isDev,
-                    reloadAll: true
+
                   }
                 },
                 "css-loader",
@@ -85,10 +86,9 @@ module.exports = {
               ],
             },
             {
-                test: /\.m?js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: jsLoaders(),
-                
+              test: /\.js$/,
+              exclude: /node_modules/,
+              use: jsLoaders()
               }
           ],
     }
