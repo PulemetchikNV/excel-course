@@ -1,0 +1,21 @@
+{
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "requireConfigFile": false
+      },
+    "plugins": [
+        "babel",
+        "@babel"
+            ],
+    "rules":{
+        "no-unused-vars" : "warn",
+        "no-debugger":"off"
+    },
+    "env": {
+        "es6": true,
+        "browser": true
+    },
+    "extends": [
+        "eslint:recommended"
+    ]  
+}

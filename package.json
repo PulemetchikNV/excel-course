@@ -1,52 +1,60 @@
 {
   "name": "excel-course",
   "version": "1.0.0",
-  "description": "Pure JavaJscript Excel App",
-  "main": "webpack.config.js",
+  "description": "Excel course",
+  "private": "true",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=development webpack-dev-server --open",
-    "build": "cross-env NODE_ENV=production webpack --mode production"
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "dev": "cross-env NODE_ENV=development webpack"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PulemetchikNV/excel-course.git"
-  },
+  "browserslist": "> 0.25%, not dead",
   "keywords": [
     "js",
     "JavaScript",
     "Excel"
   ],
-  "author": "Pulemet4ikNV",
+  "author": "Andrey Ivlev <Pulemet4ikNV@yandex.ru>",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/PulemetchikNV/excel-course/issues"
-  },
-  "homepage": "https://github.com/PulemetchikNV/excel-course#readme",
-  "private": true,
-  "browserlst": "> 0.25%, not dead",
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/eslint-plugin": "^7.14.5",
     "@babel/preset-env": "^7.16.4",
-    "babel-eslint": "^10.1.0",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
     "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
-    "copy-webpack-plugin": "^10.0.0",
-    "cross-env": "^7.0.0",
     "css-loader": "^6.5.1",
-    "eslint": "^6.8.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-loader": "^3.0.4",
-    "html-webpack-plugin": "^5.5.0",
+    "css-minimizer-webpack-plugin": "^3.2.0",
+    "eslint": "^8.4.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-webpack-plugin": "^3.1.1",
+    "file-loader": "^6.2.0",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "loadash": "^1.0.0",
     "mini-css-extract-plugin": "^2.4.5",
-    "sass": "^1.43.5",
+    "sass": "^1.44.0",
     "sass-loader": "^12.3.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.2.5",
     "webpack": "^5.64.4",
+    "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.6.0"
+    "webpack-dev-server": "^4.6.0",
+    "xml-loader": "^1.2.1"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "normalize.css": "^8.0.1"
+    "copy-webpack-plugin": "^10.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
+    "normalize.css": "^8.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
