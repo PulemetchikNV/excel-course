@@ -1,95 +1,120 @@
 const path = require('path')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HTMLWebpackPlugin = require('html-webpack-plugin')
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const CopyWebpackPlugin = require("copy-webpack-plugin")
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserWebpackPlugin = require('terser-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const isProd = process.env.NODE_ENV === 'production';
-const isDev = !isProd;
-
-const filename = ext => isDev ? `bundle.${ext}` : `bundle.hash.${ext}`
-
-const jsLoaders = () => {
-  const loaders = [
-    {
-      loader: 'babel-loader',
-      options: {
+const isDev = process.env.NODE_ENV === 'development'
+const isProd = !isDev
+const filename = (ext) => isProd? `[name].[contenthash].${ext}` : `[name].${ext}`
+const babelOptions = (preset) => {
+    const opts = {
         presets: ['@babel/preset-env']
       }
+
+    if(preset){
+        opts.presets.push(preset)
     }
-  ]
-
-  if (isDev) {
-    loaders.push('eslint-loader')
-  }
-
-  return loaders
+    return opts
 }
 
+const plugins = () => {
+    const base = [
+        new HTMLWebpackPlugin({
+            template: 'index.html',
+            minify: {
+                removeComments: isProd,
+                collapseWhitespace: isProd
+            }
+        }),
+        new CleanWebpackPlugin(),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "src/favicon.ico"),
+                    to: path.resolve(__dirname, "dist")
+                },
+            ],
+        }),
+        new MiniCssExtractPlugin({
+            filename: filename('css')
+        }), 
+        new ESLintPlugin({
 
+        })
+    ]
+    
+    if(isProd){
+        base.push(new BundleAnalyzerPlugin())
+    }
+    return base
+}
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: ['@babel/polyfill', './index.js'],
-    output:{
+    entry: {
+        main:['@babel/polyfill', './index.js'],
+    },
+    output: {
         filename: filename('js'),
         path: path.resolve(__dirname, 'dist')
-
     },
-    resolve:{
+    resolve: {
         extensions: ['.js'],
         alias: {
             "@": path.resolve(__dirname, 'src'),
             "@core": path.resolve(__dirname, 'src/core')
         }
     },
-    devtool : isDev ? 'source-map' : false,
-    devServer: {
-        port: 3000,
-        // hot: isDev
+    optimization: {
+      splitChunks: {
+          chunks: "all"
+      },
+      runtimeChunk: 'single',
+      minimizer: [
+        new CssMinimizerPlugin(),
+        new TerserWebpackPlugin()
+      ],   
     },
-    plugins:[
-        new CleanWebpackPlugin(),
-        new HTMLWebpackPlugin({
-            template: 'index.html',
-            minify:{
-                removeComments: isProd,
-                collapseWhitespace: isProd
-            }
-
-        }),
-        new CopyPlugin({
-            patterns: [
-              { 
-                  from: path.resolve(__dirname, 'src/favicon.ico'), 
-                to: path.resolve(__dirname, 'dist') 
-              },
-            ],
-          }),
-        new MiniCssExtractPlugin({
-            filename: filename('css')
-        })
-    ],
+    devServer: {
+        // historyApiFallback: true,
+        // open: true,
+        hot: isDev,
+        port: 3000
+    },
+    devtool: isProd ? false : 'source-map',
+    plugins: plugins(),
     module:{
         rules: [
             {
-              test: /\.s[ac]ss$/i,
-              use: [
-                {
-                  loader: MiniCssExtractPlugin.loader,
-                  options: {
-
-                  }
-                },
-                "css-loader",
-                "sass-loader",
-              ],
+                test: /.s?css$/,
+                use: [MiniCssExtractPlugin.loader, "css-loader", 'sass-loader'],
             },
             {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              use: jsLoaders()
-              }
-          ],
+                test: /.less$/,
+                use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
+            },
+            
+            {
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource'
+            },
+            {
+                test: /\.xml$/,
+                use: ['xml-loader']
+            },
+            {
+                test: /\.m?js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: babelOptions()
+                  }
+              },
+        ]
     }
 }
